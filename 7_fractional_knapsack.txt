@@ -1,0 +1,73 @@
+/* Experiment 7: Fractional Knapsack Problem (Greedy Method)
+   Items can be broken into fractions. Greedy choice: take items in
+   decreasing order of profit/weight ratio; take a fraction of the
+   last item if it does not fit completely.
+   Time: O(n^2) here because of simple sorting (O(n log n) with a
+   better sort). */
+#include <stdio.h>
+
+int main() {
+    int n, i, j;
+    float weight[50], profit[50], ratio[50];
+    float capacity, totalProfit = 0, temp;
+
+    printf("Enter number of items: ");
+    scanf("%d", &n);
+
+    printf("Enter weight and profit of each item:\n");
+    for (i = 0; i < n; i++) {
+        printf("Item %d: ", i + 1);
+        scanf("%f %f", &weight[i], &profit[i]);
+        ratio[i] = profit[i] / weight[i];
+    }
+
+    printf("Enter capacity of knapsack: ");
+    scanf("%f", &capacity);
+
+    /* sort items by ratio in decreasing order */
+    for (i = 0; i < n - 1; i++) {
+        for (j = i + 1; j < n; j++) {
+            if (ratio[i] < ratio[j]) {
+                temp = ratio[i];  ratio[i] = ratio[j];    ratio[j] = temp;
+                temp = weight[i]; weight[i] = weight[j];  weight[j] = temp;
+                temp = profit[i]; profit[i] = profit[j];  profit[j] = temp;
+            }
+        }
+    }
+
+    printf("\nItems taken:\n");
+    for (i = 0; i < n; i++) {
+        if (capacity <= 0)
+            break;
+        if (weight[i] <= capacity) {             /* take the whole item */
+            totalProfit += profit[i];
+            capacity -= weight[i];
+            printf("Weight %.2f, Profit %.2f : taken fully\n", weight[i], profit[i]);
+        } else {                                 /* take a fraction */
+            float fraction = capacity / weight[i];
+            totalProfit += profit[i] * fraction;
+            printf("Weight %.2f, Profit %.2f : taken %.2f fraction\n",
+                   weight[i], profit[i], fraction);
+            capacity = 0;
+        }
+    }
+
+    printf("\nMaximum profit = %.2f\n", totalProfit);
+    return 0;
+}
+
+/* SAMPLE OUTPUT
+Enter number of items: 3
+Enter weight and profit of each item:
+Item 1: 10 60
+Item 2: 20 100
+Item 3: 30 120
+Enter capacity of knapsack: 50
+
+Items taken:
+Weight 10.00, Profit 60.00 : taken fully
+Weight 20.00, Profit 100.00 : taken fully
+Weight 30.00, Profit 120.00 : taken 0.67 fraction
+
+Maximum profit = 240.00
+*/

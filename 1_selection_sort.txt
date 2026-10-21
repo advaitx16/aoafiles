@@ -1,0 +1,46 @@
+/* Experiment 1: Selection Sort
+   Idea: repeatedly find the smallest element in the unsorted part
+   and swap it into the next position of the sorted part.
+   Time: O(n^2) in best, average and worst case. Space: O(1). */
+#include <stdio.h>
+
+void selectionSort(int a[], int n) {
+    int i, j, min, temp;
+    for (i = 0; i < n - 1; i++) {
+        min = i;                         /* assume a[i] is smallest */
+        for (j = i + 1; j < n; j++) {
+            if (a[j] < a[min])
+                min = j;                 /* remember index of smaller element */
+        }
+        if (min != i) {                  /* swap smallest into position i */
+            temp = a[i];
+            a[i] = a[min];
+            a[min] = temp;
+        }
+    }
+}
+
+int main() {
+    int a[100], n, i;
+
+    printf("Enter number of elements: ");
+    scanf("%d", &n);
+
+    printf("Enter %d elements: ", n);
+    for (i = 0; i < n; i++)
+        scanf("%d", &a[i]);
+
+    selectionSort(a, n);
+
+    printf("Sorted array: ");
+    for (i = 0; i < n; i++)
+        printf("%d ", a[i]);
+    printf("\n");
+    return 0;
+}
+
+/* SAMPLE OUTPUT
+Enter number of elements: 5
+Enter 5 elements: 64 25 12 22 11
+Sorted array: 11 12 22 25 64
+*/

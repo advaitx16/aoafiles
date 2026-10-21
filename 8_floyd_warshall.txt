@@ -1,0 +1,50 @@
+/* Experiment 8: All Pair Shortest Path - Floyd Warshall Algorithm
+   (Dynamic Programming)
+   For every intermediate vertex k, check whether going through k
+   gives a shorter path from i to j:
+        d[i][j] = min(d[i][j], d[i][k] + d[k][j])
+   Time: O(n^3). Space: O(n^2).
+   Enter 999 (infinity) where there is no direct edge. */
+#include <stdio.h>
+#define INF 999
+
+int main() {
+    int d[10][10], n, i, j, k;
+
+    printf("Enter number of vertices: ");
+    scanf("%d", &n);
+
+    printf("Enter the cost matrix (0 on diagonal, 999 for no edge):\n");
+    for (i = 0; i < n; i++)
+        for (j = 0; j < n; j++)
+            scanf("%d", &d[i][j]);
+
+    for (k = 0; k < n; k++)
+        for (i = 0; i < n; i++)
+            for (j = 0; j < n; j++)
+                if (d[i][k] + d[k][j] < d[i][j])
+                    d[i][j] = d[i][k] + d[k][j];
+
+    printf("\nAll pairs shortest path matrix:\n");
+    for (i = 0; i < n; i++) {
+        for (j = 0; j < n; j++)
+            printf("%d\t", d[i][j]);
+        printf("\n");
+    }
+    return 0;
+}
+
+/* SAMPLE OUTPUT
+Enter number of vertices: 4
+Enter the cost matrix (0 on diagonal, 999 for no edge):
+0 3 999 7
+8 0 2 999
+5 999 0 1
+2 999 999 0
+
+All pairs shortest path matrix:
+0       3       5       6
+5       0       2       3
+3       6       0       1
+2       5       7       0
+*/

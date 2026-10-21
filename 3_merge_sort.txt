@@ -1,0 +1,60 @@
+/* Experiment 3: Merge Sort (Divide and Conquer)
+   Divide: split the array into two halves.
+   Conquer: sort each half recursively.
+   Combine: merge the two sorted halves.
+   Time: O(n log n) in all cases. Space: O(n). */
+#include <stdio.h>
+
+void merge(int a[], int low, int mid, int high) {
+    int b[100];
+    int i = low, j = mid + 1, k = low;
+
+    while (i <= mid && j <= high) {      /* pick the smaller front element */
+        if (a[i] <= a[j])
+            b[k++] = a[i++];
+        else
+            b[k++] = a[j++];
+    }
+    while (i <= mid)                     /* copy leftovers of left half */
+        b[k++] = a[i++];
+    while (j <= high)                    /* copy leftovers of right half */
+        b[k++] = a[j++];
+
+    for (k = low; k <= high; k++)        /* copy back to original array */
+        a[k] = b[k];
+}
+
+void mergeSort(int a[], int low, int high) {
+    int mid;
+    if (low < high) {
+        mid = (low + high) / 2;
+        mergeSort(a, low, mid);          /* sort left half */
+        mergeSort(a, mid + 1, high);     /* sort right half */
+        merge(a, low, mid, high);        /* combine */
+    }
+}
+
+int main() {
+    int a[100], n, i;
+
+    printf("Enter number of elements: ");
+    scanf("%d", &n);
+
+    printf("Enter %d elements: ", n);
+    for (i = 0; i < n; i++)
+        scanf("%d", &a[i]);
+
+    mergeSort(a, 0, n - 1);
+
+    printf("Sorted array: ");
+    for (i = 0; i < n; i++)
+        printf("%d ", a[i]);
+    printf("\n");
+    return 0;
+}
+
+/* SAMPLE OUTPUT
+Enter number of elements: 7
+Enter 7 elements: 38 27 43 3 9 82 10
+Sorted array: 3 9 10 27 38 43 82
+*/

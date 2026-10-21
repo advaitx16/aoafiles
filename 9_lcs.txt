@@ -1,0 +1,78 @@
+/* Experiment 9: Longest Common Subsequence (Dynamic Programming)
+   L[i][j] = length of LCS of first i characters of X and first j
+   characters of Y.
+       if X[i-1] == Y[j-1]  : L[i][j] = L[i-1][j-1] + 1
+       else                 : L[i][j] = max(L[i-1][j], L[i][j-1])
+   Time: O(m*n). Space: O(m*n). */
+#include <stdio.h>
+#include <string.h>
+
+int main() {
+    char x[50], y[50], lcs[50];
+    int L[50][50];
+    int m, n, i, j, index;
+
+    printf("Enter first string: ");
+    scanf("%s", x);
+    printf("Enter second string: ");
+    scanf("%s", y);
+
+    m = strlen(x);
+    n = strlen(y);
+
+    /* build the table */
+    for (i = 0; i <= m; i++) {
+        for (j = 0; j <= n; j++) {
+            if (i == 0 || j == 0)
+                L[i][j] = 0;
+            else if (x[i - 1] == y[j - 1])
+                L[i][j] = L[i - 1][j - 1] + 1;
+            else
+                L[i][j] = (L[i - 1][j] > L[i][j - 1]) ? L[i - 1][j] : L[i][j - 1];
+        }
+    }
+
+    printf("\nLCS table:\n");
+    for (i = 0; i <= m; i++) {
+        for (j = 0; j <= n; j++)
+            printf("%d ", L[i][j]);
+        printf("\n");
+    }
+
+    /* trace back to find the subsequence itself */
+    index = L[m][n];
+    lcs[index] = '\0';
+    i = m;
+    j = n;
+    while (i > 0 && j > 0) {
+        if (x[i - 1] == y[j - 1]) {
+            lcs[--index] = x[i - 1];
+            i--;
+            j--;
+        } else if (L[i - 1][j] > L[i][j - 1])
+            i--;
+        else
+            j--;
+    }
+
+    printf("\nLength of LCS = %d\n", L[m][n]);
+    printf("LCS = %s\n", lcs);
+    return 0;
+}
+
+/* SAMPLE OUTPUT
+Enter first string: AGGTAB
+Enter second string: GXTXAYB
+
+LCS table:
+0 0 0 0 0 0 0 0
+0 0 0 0 0 1 1 1
+0 1 1 1 1 1 1 1
+0 1 1 1 1 1 1 1
+0 1 1 2 2 2 2 2
+0 1 1 2 2 3 3 3
+0 1 1 2 2 3 3 4
+
+Length of LCS = 4
+LCS = GTAB
+*/

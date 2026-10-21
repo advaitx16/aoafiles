@@ -1,0 +1,43 @@
+/* Experiment 2: Insertion Sort
+   Idea: take each element and insert it at the correct place in the
+   already sorted part on its left (like arranging playing cards).
+   Time: O(n^2) worst/average, O(n) best (already sorted). Space: O(1). */
+#include <stdio.h>
+
+void insertionSort(int a[], int n) {
+    int i, j, key;
+    for (i = 1; i < n; i++) {
+        key = a[i];                      /* element to be inserted */
+        j = i - 1;
+        while (j >= 0 && a[j] > key) {   /* shift bigger elements right */
+            a[j + 1] = a[j];
+            j--;
+        }
+        a[j + 1] = key;                  /* place key in its position */
+    }
+}
+
+int main() {
+    int a[100], n, i;
+
+    printf("Enter number of elements: ");
+    scanf("%d", &n);
+
+    printf("Enter %d elements: ", n);
+    for (i = 0; i < n; i++)
+        scanf("%d", &a[i]);
+
+    insertionSort(a, n);
+
+    printf("Sorted array: ");
+    for (i = 0; i < n; i++)
+        printf("%d ", a[i]);
+    printf("\n");
+    return 0;
+}
+
+/* SAMPLE OUTPUT
+Enter number of elements: 5
+Enter 5 elements: 64 25 12 22 11
+Sorted array: 11 12 22 25 64
+*/
